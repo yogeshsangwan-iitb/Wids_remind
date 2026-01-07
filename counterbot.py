@@ -6,14 +6,12 @@ import random
 import os
 import time
 
-# ---------------- CONFIG ----------------
 st.set_page_config(page_title="CounterBot", layout="centered")
 load_dotenv()
 
 client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
 MODEL_NAME = "gemini-2.5-flash-lite"
 
-# ---------------- SAFE AI CALL ----------------
 def safe_generate(prompt):
     for _ in range(3):  # retry 3 times
         try:
@@ -24,9 +22,8 @@ def safe_generate(prompt):
             return response.text
         except Exception:
             time.sleep(2)
-    return "⚠️ The AI service is currently overloaded. Please try again in a moment."
+    return "The AI service is currently overloaded. Please try again in a moment."
 
-# ---------------- SESSION STATE ----------------
 if "chat" not in st.session_state:
     st.session_state.chat = []
 
@@ -40,13 +37,13 @@ if "quiz_question" not in st.session_state:
     st.session_state.quiz_question = None
 
 # ---------------- UI ----------------
-st.title("🧮 CounterBot")
+st.title("The CounterBot")
 
 for msg in st.session_state.chat:
     with st.chat_message(msg["role"]):
         st.markdown(msg["content"])
 
-user_input = st.chat_input("Ask something...")
+user_input = st.chat_input("kuch toh kaho7...")
 
 # ---------------- MAIN LOGIC ----------------
 if user_input:
@@ -85,7 +82,7 @@ if user_input:
 # ---------------- SHOW QUIZ ----------------
 if st.session_state.quiz_question:
     st.divider()
-    st.subheader("🧪 Quiz Time!")
+    st.subheader("Quiz Time!")
     st.markdown(st.session_state.quiz_question)
 
     user_answer = st.text_input("Your answer:")
@@ -99,7 +96,7 @@ if st.session_state.quiz_question:
 
         evaluation = safe_generate(eval_prompt)
 
-        st.markdown("### 🧠 Evaluation")
+        st.markdown("### Evaluation")
         st.markdown(evaluation)
 
         st.session_state.quiz_question = None
